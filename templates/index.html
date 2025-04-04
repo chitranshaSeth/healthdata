@@ -1,0 +1,69 @@
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function formatNumber(num) {
+            if (num === 'N/A') return 'N/A';
+            return new Intl.NumberFormat('en-US').format(num);
+        }
+
+        function formatMarketCap(marketCap) {
+            if (marketCap === 'N/A') return 'N/A';
+            const billion = 1000000000;
+            const million = 1000000;
+            if (marketCap >= billion) {
+                return `$${(marketCap / billion).toFixed(2)}B`;
+            }
+            return `$${(marketCap / million).toFixed(2)}M`;
+        }
+
+        $(document).ready(function() {
+            $('#stockForm').on('submit', function(e) {
+                e.preventDefault();
+                
+                $('.stock-card').hide();
+                $('.error-message').hide();
+                $('.loading').show();
+
+                $.ajax({
+                    url: '/get_stock',
+                    method: 'POST',
+                    data: {
+                        query: $('#stockQuery').val()
+                    },
+                    success: function(response) {
+                        $('.loading').hide();
+                        
+                        if (response.error) {
+                            $('.error-message').text(response.error).show();
+                            return;
+                        }
+
+                        $('#stockName').text(response.name);
+                        $('#stockSymbol').text(response.symbol);
+                        $('#stockPrice').text(`$${response.price}`);
+                        
+                        const change = response.change;
+                        const changeText = change !== 'N/A' 
+                            ? `${change.toFixed(2)}%` 
+                            : 'N/A';
+                        const changeColor = change > 0 ? 'text-success' : 'text-danger';
+                        $('#stockChange').text(changeText).removeClass('text-success text-danger').addClass(changeColor);
+                        
+                        $('#stockVolume').text(formatNumber(response.volume));
+                        $('#marketCap').text(formatMarketCap(response.market_cap));
+                        
+                        $('.stock-card').show();
+                    },
+                    error: function() {
+                        $('.loading').hide();
+                        $('.error-message').text('An error occurred while fetching stock information.').show();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
