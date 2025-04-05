@@ -1,12 +1,3 @@
-# Market Health Data
-
-Analyzes health data to predict possible allergy.
-
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-
 
 ## Introduction
 Market Health Data is a project designed to analyze health data to predict possible allergies. The project is primarily written in Python, with some components in C, Cython, XSLT, C++, and Fortran.
