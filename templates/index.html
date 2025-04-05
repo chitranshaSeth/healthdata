@@ -1,4 +1,3 @@
-tee templates/index.html > /dev/null << 'EOL'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +6,93 @@ tee templates/index.html > /dev/null << 'EOL'
     <title>Stock Price Tracker</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .container { max-width: 800px; margin-top: 50px; }
-        .card { border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-        .form-control { border-radius: 10px; }
-        .btn { border-radius: 10px; }
-        .stock-info { background-color: #ffffff; padding: 20px; border-radius: 15px; margin-top: 20px; }
-        .price-change-positive { color: #28a745; }
-        .price-change-negative { color: #dc3545; }
+        body { 
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        .container { 
+            max-width: 800px;
+            margin-top: 50px;
+        }
+        .card { 
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+        .form-control { 
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 1.1em;
+        }
+        .btn { 
+            border-radius: 10px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+        }
+        .stock-info { 
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .price-change-positive { 
+            color: #198754;
+            font-weight: bold;
+        }
+        .price-change-negative { 
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 20px;
+        }
+        .stock-name {
+            font-size: 1.5em;
+            color: #333;
+            margin: 0;
+        }
+        .stock-symbol {
+            font-size: 1.2em;
+            color: #6c757d;
+            margin: 0;
+        }
+        .stock-price {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+        .stock-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .detail-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .detail-label {
+            color: #6c757d;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        .detail-value {
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #212529;
+        }
+        .alert {
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -22,33 +100,90 @@ tee templates/index.html > /dev/null << 'EOL'
         <div class="card">
             <div class="card-body">
                 <h1 class="text-center mb-4">Stock Price Tracker</h1>
-                <form method="POST" class="mb-4">
+                <form id="stockForm" class="mb-4">
                     <div class="input-group">
-                        <input type="text" name="symbol" class="form-control" placeholder="Enter stock symbol (e.g., AAPL)" required>
+                        <input type="text" name="query" id="query" class="form-control" placeholder="Enter stock symbol (e.g., AAPL)" required>
                         <button type="submit" class="btn btn-primary">Get Price</button>
                     </div>
                 </form>
-                {% if stock_data %}
-                <div class="stock-info">
-                    <h2>{{ stock_data.symbol }}</h2>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <p><strong>Current Price:</strong> ${{ stock_data.price }}</p>
-                            <p><strong>Change:</strong> <span class="{% if stock_data.change >= 0 %}price-change-positive{% else %}price-change-negative{% endif %}">{{ stock_data.change }}%</span></p>
+                <div id="result" class="stock-info" style="display: none;">
+                    <div class="stock-header">
+                        <div>
+                            <h2 class="stock-name" id="name"></h2>
+                            <p class="stock-symbol" id="symbol"></p>
                         </div>
-                        <div class="col-md-6">
-                            <p><strong>Previous Close:</strong> ${{ stock_data.previous_close }}</p>
-                            <p><strong>Volume:</strong> {{ stock_data.volume }}</p>
+                        <div class="text-end">
+                            <p class="stock-price" id="price"></p>
+                            <p class="mb-0" id="change"></p>
+                        </div>
+                    </div>
+                    <div class="stock-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Volume</div>
+                            <div class="detail-value" id="volume"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Market Cap</div>
+                            <div class="detail-value" id="marketCap"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Day High</div>
+                            <div class="detail-value" id="highDay"></div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Day Low</div>
+                            <div class="detail-value" id="lowDay"></div>
                         </div>
                     </div>
                 </div>
-                {% endif %}
-                {% if error %}
-                <div class="alert alert-danger mt-3" role="alert">{{ error }}</div>
-                {% endif %}
+                <div id="error" class="alert alert-danger" style="display: none;"></div>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('stockForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const query = document.getElementById('query').value;
+            const formData = new FormData();
+            formData.append('query', query);
+            
+            try {
+                const response = await fetch('/get_stock', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('error').textContent = data.error;
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('result').style.display = 'none';
+                } else {
+                    document.getElementById('error').style.display = 'none';
+                    document.getElementById('result').style.display = 'block';
+                    
+                    document.getElementById('symbol').textContent = data.symbol;
+                    document.getElementById('name').textContent = data.name;
+                    document.getElementById('price').textContent = data.price;
+                    
+                    const changeElement = document.getElementById('change');
+                    changeElement.textContent = data.change;
+                    changeElement.className = parseFloat(data.change) >= 0 ? 'price-change-positive' : 'price-change-negative';
+                    
+                    document.getElementById('volume').textContent = data.volume;
+                    document.getElementById('marketCap').textContent = data.market_cap;
+                    document.getElementById('highDay').textContent = data.high_day;
+                    document.getElementById('lowDay').textContent = data.low_day;
+                }
+            } catch (error) {
+                document.getElementById('error').textContent = 'An error occurred while fetching the data.';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('result').style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
