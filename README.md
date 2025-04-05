@@ -1,6 +1,6 @@
 
 ## Introduction
-Market Health Data is a project designed to analyze health data to predict possible allergies. The project is primarily written in Python, with some components in C, Cython, XSLT, C++, and Fortran.
+Market Health Data is a project designed to analyze market health data to predict ROI for your stock based on holding time & market analysis . The project is primarily written in Python, with some components in C, Cython, XSLT, C++, and Fortran.
 
 ## Features
 - Analyze health data
