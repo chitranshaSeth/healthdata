@@ -1,2 +1,2 @@
 # healthdata
-Analyzes health data to predict possible allergy
+stock market analysis for low risk appetite investors.
