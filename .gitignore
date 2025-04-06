@@ -8,16 +8,18 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
 # Distribution / packaging
 dist/
 build/
 *.egg-info/
-
-# IDE specific files
-.idea/
-.vscode/
-*.swp
-*.swo
 
 # Environment variables
 .env
@@ -28,7 +30,3 @@ build/
 # Local development settings
 instance/
 .webassets-cache
-
-# macOS system files
-.DS_Store
-**/.DS_Store

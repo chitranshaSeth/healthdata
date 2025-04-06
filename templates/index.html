@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stock Price Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f0f2f5;
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
             padding: 20px 0;
         }
         
@@ -18,30 +21,38 @@
         }
         
         .card {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #1e1e1e;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
-            padding: 20px;
+            padding: 24px;
             border: none;
+            color: #ffffff;
         }
         
         .form-control {
+            background: #2d2d2d;
             border-radius: 8px;
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #3d3d3d;
+            color: #ffffff;
             transition: all 0.3s ease;
         }
         
         .form-control:focus {
+            background: #2d2d2d;
             border-color: #6c5ce7;
             box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.25);
+            color: #ffffff;
         }
         
         .btn {
             padding: 12px 24px;
             border-radius: 8px;
             transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
         
         .btn-primary {
@@ -55,438 +66,275 @@
         }
         
         .section-title {
-            color: #2d3436;
+            color: #ffffff;
             font-size: 1.5rem;
             margin-bottom: 1rem;
-            font-weight: 600;
-        }
-        
-        .disclaimer-banner {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
         }
         
         .stock-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 16px;
+            padding: 24px;
             margin-top: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .stock-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #3d3d3d;
         }
         
-        .stock-name {
+        .stock-title {
+            margin: 0;
+        }
+        
+        .stock-symbol {
             font-size: 1.25rem;
-            font-weight: 600;
-            color: #2d3436;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+        
+        .stock-exchange {
+            font-size: 0.875rem;
+            color: #888;
         }
         
         .stock-price {
-            font-size: 1.5rem;
+            text-align: right;
+        }
+        
+        .current-price {
+            font-size: 2rem;
             font-weight: 700;
-            color: #2d3436;
+            color: #ffffff;
+            margin-bottom: 4px;
         }
         
-        .stock-change {
+        .price-change {
             font-size: 1rem;
-            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
         }
         
-        .stock-change.positive {
+        .price-change.positive {
             color: #00b894;
         }
         
-        .stock-change.negative {
+        .price-change.negative {
             color: #ff7675;
         }
         
-        .recommendation-section {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
+        .stock-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
         }
         
-        .recommendation-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #2d3436;
-            margin-bottom: 10px;
+        .metric-item {
+            background: #2d2d2d;
+            padding: 16px;
+            border-radius: 12px;
         }
         
-        .recommendation-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
+        .metric-label {
+            font-size: 0.875rem;
+            color: #888;
+            margin-bottom: 8px;
         }
         
-        .recommendation-type {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .recommendation-details {
-            font-size: 0.9rem;
-            color: #636e72;
+        .metric-value {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #ffffff;
         }
         
         .chart-container {
-            margin-top: 20px;
-            padding: 15px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 24px;
+            height: 400px;
         }
         
-        #loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-            font-size: 1.1rem;
-            color: #6c757d;
+        .volume-bar {
+            height: 100px;
+            margin-top: 16px;
         }
         
-        #loading::after {
-            content: "Loading...";
-            display: inline-block;
-            animation: ellipsis 1.5s infinite;
+        .trend-up {
+            color: #00b894;
         }
         
-        @keyframes ellipsis {
-            0% { content: "Loading"; }
-            25% { content: "Loading."; }
-            50% { content: "Loading.."; }
-            75% { content: "Loading..."; }
+        .trend-down {
+            color: #ff7675;
         }
         
-        .roi-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
+        .trend-neutral {
+            color: #888;
         }
         
-        .roi-section {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #dee2e6;
+        .comparison-section {
+            margin-top: 40px;
         }
         
-        .roi-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        
-        .roi-label {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 5px;
-        }
-        
-        .roi-value {
-            color: #212529;
-        }
-        
-        .risk-score {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-        
-        .risk-low {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .risk-moderate {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .risk-high {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        .entry-exit-grid {
+        .comparison-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        .entry-exit-point {
-            background: #fff;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #dee2e6;
+        .comparison-card {
+            background: #1e1e1e;
+            border-radius: 16px;
+            padding: 24px;
         }
         
-        .strategy-summary {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+        .market-data {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #3d3d3d;
         }
         
-        .form-group {
-            margin-bottom: 1rem;
+        .market-item {
+            text-align: center;
         }
         
-        .form-control {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid var(--md-sys-color-outline);
-            border-radius: 4px;
-            background: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
+        .market-label {
+            font-size: 0.75rem;
+            color: #888;
+            margin-bottom: 4px;
         }
         
-        .form-control:focus {
-            outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 2px var(--md-sys-color-primary-container);
+        .market-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #ffffff;
         }
-        
-        .form-text {
-            font-size: 0.875rem;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-top: 0.25rem;
-        }
-        
-        .recommendation-section {
-            background: var(--md-sys-color-surface-variant);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .recommendation-section h4 {
-            color: var(--md-sys-color-on-surface);
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-        }
-        
-        .recommendation-section p {
-            margin: 0.5rem 0;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-        
-        .recommendation-section strong {
-            color: var(--md-sys-color-on-surface);
-        }
-        
-        .alert-warning {
-            background: var(--md-sys-color-error-container);
-            color: var(--md-sys-color-on-error-container);
-        }
-        
-        .progress {
-            height: 5px;
-            border-radius: 2px;
-        }
-        .progress-bar {
-            background-color: #007bff;
-        }
-        .price-up { color: green; }
-        .price-down { color: red; }
-        .technical-indicator { font-size: 0.9em; }
-        .prediction-chart { height: 300px; }
-        .loading { opacity: 0.5; }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="disclaimer-banner">
-            <strong>Disclaimer:</strong> The stock recommendations provided on this platform are for informational purposes only and should not be considered as financial advice. Users should conduct their own research and use their own discretion when making investment decisions. Past performance is not indicative of future results. Always consult with a qualified financial advisor before making any investment decisions.
+        <div class="card">
+            <h1 class="section-title">Stock Price Tracker</h1>
+            <form id="stockForm" class="stock-form">
+                <div class="form-group">
+                    <label for="stockInput">Stock Symbol:</label>
+                    <input type="text" id="stockInput" name="query" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Get Stock Info</button>
+            </form>
         </div>
         
         <div id="error" class="alert alert-danger" style="display: none;"></div>
         <div id="loading"></div>
         
-        <div class="container mt-4">
-            <div class="row">
-                <div class="col-md-8 offset-md-2">
-                    <!-- Add API Stats Section -->
-                    <div id="api-stats" class="card mb-4">
-                        <div class="card-body">
-                            <h6 class="card-title">API Usage Statistics</h6>
-                            <div class="row">
-                                <div class="col-6">
-                                    <small class="text-muted">Total Requests:</small>
-                                    <div id="total-requests">0</div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Requests Today:</small>
-                                    <div id="requests-today">0</div>
-                                </div>
-                            </div>
-                            <div class="mt-2">
-                                <small class="text-muted">Requests per Symbol:</small>
-                                <div id="requests-per-symbol" class="small"></div>
-                            </div>
-                        </div>
+        <div id="stockResult" style="display: none;">
+            <div class="stock-card">
+                <div class="stock-header">
+                    <div class="stock-title">
+                        <div id="stockSymbol" class="stock-symbol"></div>
+                        <div id="stockExchange" class="stock-exchange"></div>
                     </div>
-                    
-                    <!-- Rest of the form -->
-                    <div class="card">
-                        <h1 class="section-title">Stock Price Tracker</h1>
-                        <form id="stockForm" class="stock-form">
-                            <div class="form-group">
-                                <label for="stockInput">Stock Symbol:</label>
-                                <input type="text" id="stockInput" name="query" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="target_roi">Target ROI (%)</label>
-                                <input type="number" class="form-control" id="target_roi" name="target_roi" 
-                                       min="0" max="1000" step="0.1" placeholder="Optional">
-                                <small class="form-text text-muted">Enter your desired return on investment percentage (optional)</small>
-                            </div>
-                            <div class="form-group">
-                                <label for="holdingYears">Holding Period (Years):</label>
-                                <input type="number" id="holdingYears" name="holding_years" class="form-control" step="0.1" min="0.1" max="10">
-                                <small class="form-text text-muted">Enter holding period in years (e.g., 0.5 for 6 months, 2 for 2 years)</small>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Get Stock Info</button>
-                        </form>
-                        
-                        <div id="stockResult" style="display: none;">
-                            <div class="stock-card">
-                                <div class="stock-header">
-                                    <h2 id="stockSymbol"></h2>
-                                    <div class="price-container">
-                                        <span id="stockPrice" class="price"></span>
-                                        <span id="stockChange" class="change"></span>
-                                    </div>
-                                </div>
-                                <div class="stock-details">
-                                    <div class="detail-row">
-                                        <span class="label">Day High:</span>
-                                        <span id="stockHigh"></span>
-                                    </div>
-                                    <div class="detail-row">
-                                        <span class="label">Day Low:</span>
-                                        <span id="stockLow"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div id="recommendationSection"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Add delay message container -->
-                    <div id="delay-message" class="alert alert-warning" style="display: none;">
-                        <span id="delay-text"></span>
-                        <div class="progress mt-2">
-                            <div id="delay-progress" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Technical Indicators -->
-                    <div id="technicalIndicators" class="mb-4">
-                        <h6>Technical Indicators</h6>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="technical-indicator">
-                                    <strong>RSI:</strong>
-                                    <span class="rsi-value"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="technical-indicator">
-                                    <strong>MA20:</strong>
-                                    <span class="ma20-value"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="technical-indicator">
-                                    <strong>MA50:</strong>
-                                    <span class="ma50-value"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bollinger-bands mt-2">
-                            <strong>Bollinger Bands:</strong>
-                            <div class="bands-values small"></div>
-                        </div>
-                        <div class="macd mt-2">
-                            <strong>MACD:</strong>
-                            <div class="macd-values small">
-                                <div>MACD Line: <span class="macd-line"></span></div>
-                                <div>Signal Line: <span class="signal-line"></span></div>
-                                <div>Histogram: <span class="histogram"></span></div>
-                            </div>
-                        </div>
-                        <div class="stochastic mt-2">
-                            <strong>Stochastic:</strong>
-                            <div class="stoch-values small">
-                                <div>%K: <span class="stoch-k"></span></div>
-                                <div>%D: <span class="stoch-d"></span></div>
-                            </div>
-                        </div>
-                        <div class="trend-analysis mt-2">
-                            <strong>Trend Analysis:</strong>
-                            <div class="trend-values small">
-                                <div>Direction: <span class="trend-direction"></span></div>
-                                <div>Strength: <span class="trend-strength"></span></div>
-                                <div>Signals: <span class="trend-signals"></span></div>
-                            </div>
-                        </div>
+                    <div class="stock-price">
+                        <div id="stockPrice" class="current-price"></div>
+                        <div id="priceChange" class="price-change"></div>
                     </div>
                 </div>
+                
+                <div class="stock-metrics">
+                    <div class="metric-item">
+                        <div class="metric-label">Day High</div>
+                        <div id="stockHigh" class="metric-value"></div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">Day Low</div>
+                        <div id="stockLow" class="metric-value"></div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">Opening Price</div>
+                        <div id="stockOpen" class="metric-value"></div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-label">Previous Close</div>
+                        <div id="stockPrevClose" class="metric-value"></div>
+                    </div>
+                </div>
+                
+                <div class="market-data">
+                    <div class="market-item">
+                        <div class="market-label">Market Cap</div>
+                        <div id="marketCap" class="market-value">-</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-label">Volume</div>
+                        <div id="volume" class="market-value">-</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-label">52W High</div>
+                        <div id="high52w" class="market-value">-</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-label">52W Low</div>
+                        <div id="low52w" class="market-value">-</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="priceChart"></canvas>
+                </div>
             </div>
+        </div>
+
+        <!-- Compare Stocks Section -->
+        <div class="comparison-section">
+            <h2 class="section-title">Compare Stocks</h2>
+            <div class="form-group">
+                <input type="text" id="comparisonSymbols" class="form-control" 
+                       placeholder="e.g., AAPL, MSFT, GOOGL">
+                <small class="form-text text-muted">Enter up to 5 stock symbols separated by commas</small>
+            </div>
+            <button id="compareStocksBtn" class="btn btn-primary mt-3">Compare Stocks</button>
+            <div id="comparisonResults" class="comparison-grid"></div>
         </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script>
-        let ws = null;
-        let predictionChart = null;
-        
-        document.getElementById('stockForm').addEventListener('submit', async function(e) {
+        document.getElementById('stockForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            getStockInfo();
-        });
-        
-        function getStockInfo() {
             const symbol = document.getElementById('stockInput').value.trim().toUpperCase();
-            const targetRoi = document.getElementById('target_roi').value;
-            const holdingYears = document.getElementById('holdingYears').value;
-            
-            if (!symbol) {
-                showError('Please enter a stock symbol');
-                return;
-            }
-            
-            // Hide any previous messages
+            if (!symbol) return;
+            getStockInfo(symbol);
+        });
+
+        document.getElementById('compareStocksBtn').addEventListener('click', function() {
+            compareStocks();
+        });
+
+        function getStockInfo(symbol) {
             hideError();
-            hideDelay();
-            
-            // Show loading state
             document.getElementById('loading').style.display = 'block';
             document.getElementById('stockResult').style.display = 'none';
             
-            fetch(`/get_stock/${symbol}?target_roi=${targetRoi}&holding_years=${holdingYears}`)
+            fetch(`/get_stock/${symbol}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.delay) {
-                        // Show delay message and start countdown
                         showDelay(data.delay_seconds, data.message);
-                        setTimeout(() => getStockInfo(), data.delay_seconds * 1000);
+                        setTimeout(() => getStockInfo(symbol), data.delay_seconds * 1000);
                         return;
                     }
                     
@@ -505,7 +353,130 @@
                     document.getElementById('loading').style.display = 'none';
                 });
         }
-        
+
+        function displayStockResult(data) {
+            const resultDiv = document.getElementById('stockResult');
+            resultDiv.style.display = 'block';
+            
+            // Update basic info
+            document.getElementById('stockSymbol').textContent = data.symbol;
+            document.getElementById('stockPrice').textContent = formatPrice(data.current_price);
+            
+            if (data.company_profile) {
+                document.getElementById('stockExchange').textContent = 
+                    `${data.company_profile.name} • ${data.company_profile.exchange}`;
+            }
+            
+            // Update quote details
+            if (data.quote) {
+                const quote = data.quote;
+                document.getElementById('stockHigh').textContent = formatPrice(quote.h);
+                document.getElementById('stockLow').textContent = formatPrice(quote.l);
+                document.getElementById('stockOpen').textContent = formatPrice(quote.o);
+                document.getElementById('stockPrevClose').textContent = formatPrice(quote.pc);
+                
+                // Calculate and display price changes
+                const priceChange = quote.c - quote.pc;
+                const priceChangePercent = (priceChange / quote.pc) * 100;
+                
+                const priceChangeEl = document.getElementById('priceChange');
+                const changeClass = priceChange >= 0 ? 'positive' : 'negative';
+                const arrow = priceChange >= 0 ? '▲' : '▼';
+                
+                priceChangeEl.className = `price-change ${changeClass}`;
+                priceChangeEl.textContent = 
+                    `${arrow} ${formatPrice(Math.abs(priceChange))} (${Math.abs(priceChangePercent).toFixed(2)}%)`;
+            }
+            
+            // Create price chart if historical data is available
+            if (data.historical_data) {
+                createPriceChart(data.historical_data);
+            }
+        }
+
+        function createPriceChart(historicalData) {
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            const labels = historicalData.timestamps.map(timestamp => 
+                new Date(timestamp * 1000).toLocaleDateString()
+            );
+            
+            if (window.priceChart) {
+                window.priceChart.destroy();
+            }
+            
+            window.priceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Stock Price',
+                        data: historicalData.closes,
+                        borderColor: '#6c5ce7',
+                        backgroundColor: 'rgba(108, 92, 231, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Price: $${context.raw.toFixed(2)}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false,
+                                color: '#3d3d3d'
+                            },
+                            ticks: {
+                                maxTicksLimit: 10,
+                                color: '#888'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: '#3d3d3d'
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(2);
+                                },
+                                color: '#888'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function formatPrice(price) {
+            return price ? `$${parseFloat(price).toFixed(2)}` : 'N/A';
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('stockResult').style.display = 'none';
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
         function showDelay(seconds, message) {
             const delayMessage = document.getElementById('delay-message');
             const delayText = document.getElementById('delay-text');
@@ -536,303 +507,92 @@
             document.getElementById('delay-message').style.display = 'none';
             document.getElementById('delay-progress').style.width = '0%';
         }
-        
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-            document.getElementById('stockResult').style.display = 'none';
-            document.getElementById('loading').style.display = 'none';
-        }
-        
-        function hideError() {
-            document.getElementById('error').style.display = 'none';
-        }
-        
-        function displayStockResult(data) {
-            const resultDiv = document.getElementById('stockResult');
-            resultDiv.style.display = 'block';
-            
-            if (data.error) {
-                showError(data.error);
+
+        function compareStocks() {
+            const symbolsInput = document.getElementById('comparisonSymbols').value;
+            if (!symbolsInput.trim()) {
+                alert('Please enter stock symbols to compare');
                 return;
             }
-            
-            // Update API stats if available
-            if (data.api_stats) {
-                updateAPIStats(data.api_stats);
+
+            const symbols = symbolsInput.split(',').map(s => s.trim()).filter(s => s);
+            if (symbols.length < 2) {
+                alert('Please enter at least 2 symbols to compare');
+                return;
             }
-            
-            let html = `
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${data.name} (${data.symbol})</h5>
-                        <div class="stock-details">
-                            <p>Current Price: ${data.price}</p>
-                            <p>Change: <span class="${parseFloat(data.change) >= 0 ? 'text-success' : 'text-danger'}">${data.change}</span></p>
-                            <p>Day High: ${data.high_day}</p>
-                            <p>Day Low: ${data.low_day}</p>
-                        </div>`;
-
-            // Add recommendations section
-            if (data.recommendation) {
-                const rec = data.recommendation;
-                html += `
-                    <div class="recommendations mt-3">
-                        <h6>Recommendations:</h6>
-                        <div class="short-term">
-                            <p><strong>Short-term:</strong> ${rec.short_term.recommendation} 
-                               (Confidence: ${rec.short_term.confidence})<br>
-                               <small class="text-muted">${rec.short_term.reason}</small></p>
-                        </div>
-                        <div class="long-term">
-                            <p><strong>Long-term:</strong> ${rec.long_term.recommendation}
-                               (Confidence: ${rec.long_term.confidence})<br>
-                               <small class="text-muted">${rec.long_term.reason}</small></p>
-                        </div>`;
-
-                // Add target analysis if available
-                if (rec.target_analysis) {
-                    const analysis = rec.target_analysis;
-                    html += `
-                        <div class="target-analysis">
-                            <h6>Target Analysis:</h6>
-                            <p>Target Price: ${analysis.target_price}</p>
-                            <p>Risk Level: ${analysis.risk_level} (${analysis.risk_score})</p>
-                            <p class="strategy">${analysis.strategy}</p>`;
-
-                    // Add holding period analysis if available
-                    if (analysis.holding_period_analysis) {
-                        const holding = analysis.holding_period_analysis;
-                        html += `
-                            <div class="holding-period mt-2">
-                                <h6>Holding Period Analysis:</h6>
-                                <p>Estimated ROI: ${holding.estimated_roi}</p>
-                                <p>Projected Range: ${holding.roi_range}</p>
-                                <p>Confidence: ${holding.confidence_level}</p>
-                                <p><small class="text-muted">${holding.historical_context}</small></p>
-                            </div>`;
-                    }
-                    
-                    html += `</div>`;
-                }
-                
-                html += `</div>`;
+            if (symbols.length > 5) {
+                alert('Maximum 5 symbols can be compared at once');
+                return;
             }
 
-            html += `
-                    </div>
-                </div>`;
-            
-            resultDiv.innerHTML = html;
-        }
+            const loadingDiv = document.getElementById('loading');
+            const resultsDiv = document.getElementById('comparisonResults');
+            loadingDiv.style.display = 'block';
+            resultsDiv.innerHTML = '';
 
-        function updateAPIStats(stats) {
-            document.getElementById('total-requests').textContent = stats.total_requests;
-            document.getElementById('requests-today').textContent = stats.requests_today;
-            
-            const symbolsDiv = document.getElementById('requests-per-symbol');
-            let symbolsHtml = '';
-            for (const [symbol, count] of Object.entries(stats.requests_per_symbol)) {
-                symbolsHtml += `<div>${symbol}: ${count} requests</div>`;
-            }
-            symbolsDiv.innerHTML = symbolsHtml;
-        }
-
-        // Add function to fetch API stats periodically
-        function fetchAPIStats() {
-            fetch('/api_stats')
+            fetch(`/compare_stocks?symbols=${symbols.join(',')}`)
                 .then(response => response.json())
-                .then(stats => {
-                    updateAPIStats(stats);
+                .then(data => {
+                    if (data.delay) {
+                        showDelay(data.delay_seconds, data.message);
+                        setTimeout(() => compareStocks(), data.delay_seconds * 1000);
+                        return;
+                    }
+
+                    if (data.error) {
+                        showError(data.error);
+                        return;
+                    }
+
+                    displayComparisonResults(data.comparison);
                 })
                 .catch(error => {
-                    console.error('Error fetching API stats:', error);
+                    showError('Error comparing stocks: ' + error.message);
+                })
+                .finally(() => {
+                    loadingDiv.style.display = 'none';
                 });
         }
 
-        // Update API stats every 30 seconds
-        setInterval(fetchAPIStats, 30000);
+        function displayComparisonResults(comparison) {
+            const resultsDiv = document.getElementById('comparisonResults');
+            resultsDiv.innerHTML = '';
 
-        // Fetch initial stats
-        fetchAPIStats();
+            for (const [symbol, data] of Object.entries(comparison)) {
+                if (data.error) {
+                    resultsDiv.innerHTML += `
+                        <div class="comparison-card">
+                            <div class="comparison-header">
+                                <h3>${symbol}</h3>
+                            </div>
+                            <div class="alert alert-danger">${data.error}</div>
+                        </div>`;
+                    continue;
+                }
 
-        function connectWebSocket(symbol) {
-            if (ws) {
-                ws.close();
+                const profile = data.company_profile || {};
+                resultsDiv.innerHTML += `
+                    <div class="comparison-card">
+                        <div class="comparison-header">
+                            <h3>${symbol}</h3>
+                            <div class="price">${formatPrice(data.current_price)}</div>
+                        </div>
+                        <div class="comparison-metrics">
+                            <div class="metric-row">
+                                <span class="metric-label">Company Name:</span>
+                                <span class="metric-value">${profile.name || 'N/A'}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Exchange:</span>
+                                <span class="metric-value">${profile.exchange || 'N/A'}</span>
+                            </div>
+                            <div class="metric-row">
+                                <span class="metric-label">Currency:</span>
+                                <span class="metric-value">${profile.currency || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>`;
             }
-            ws = new WebSocket(`ws://${window.location.host}/ws?symbol=${symbol}`);
-            ws.onmessage = function(event) {
-                const data = JSON.parse(event.data);
-                if (data.type === 'price_update') {
-                    updateStockDisplay(data.data);
-                }
-            };
-        }
-
-        function formatPrice(price) {
-            return typeof price === 'number' ? `$${price.toFixed(2)}` : price;
-        }
-
-        function updateStockDisplay(data) {
-            const resultDiv = document.getElementById('stockResult');
-            resultDiv.style.display = 'block';
-
-            // Update basic info
-            resultDiv.querySelector('.symbol').textContent = data.symbol;
-            resultDiv.querySelector('.price').textContent = formatPrice(data.current_price);
-            resultDiv.querySelector('.last-update').textContent = 
-                `Last updated: ${new Date(data.last_update * 1000).toLocaleString()}`;
-
-            // Update technical indicators
-            if (data.technical_indicators) {
-                const ti = data.technical_indicators;
-                if (ti.moving_averages) {
-                    resultDiv.querySelector('.ma20-value').textContent = 
-                        formatPrice(ti.moving_averages.MA20);
-                    resultDiv.querySelector('.ma50-value').textContent = 
-                        formatPrice(ti.moving_averages.MA50);
-                }
-                if (ti.rsi) {
-                    resultDiv.querySelector('.rsi-value').textContent = 
-                        ti.rsi.toFixed(2);
-                }
-                if (ti.bollinger_bands) {
-                    resultDiv.querySelector('.bands-values').innerHTML = 
-                        `Upper: ${formatPrice(ti.bollinger_bands.upper)}<br>` +
-                        `Middle: ${formatPrice(ti.bollinger_bands.middle)}<br>` +
-                        `Lower: ${formatPrice(ti.bollinger_bands.lower)}`;
-                }
-                if (ti.macd) {
-                    resultDiv.querySelector('.macd-line').textContent = 
-                        ti.macd.macd.toFixed(4);
-                    resultDiv.querySelector('.signal-line').textContent = 
-                        ti.macd.signal.toFixed(4);
-                    resultDiv.querySelector('.histogram').textContent = 
-                        ti.macd.histogram.toFixed(4);
-                }
-                if (ti.stochastic) {
-                    resultDiv.querySelector('.stoch-k').textContent = 
-                        ti.stochastic.k.toFixed(2);
-                    resultDiv.querySelector('.stoch-d').textContent = 
-                        ti.stochastic.d.toFixed(2);
-                }
-                if (ti.trend) {
-                    resultDiv.querySelector('.trend-direction').textContent = 
-                        ti.trend.direction;
-                    resultDiv.querySelector('.trend-strength').textContent = 
-                        ti.trend.strength;
-                    resultDiv.querySelector('.trend-signals').textContent = 
-                        ti.trend.signals.join(', ');
-                }
-            }
-
-            // Update prediction
-            if (data.price_prediction) {
-                const pred = data.price_prediction;
-                resultDiv.querySelector('.prediction-details').innerHTML = 
-                    `Predicted Price: ${formatPrice(pred.predicted_price)}<br>` +
-                    `Range: ${formatPrice(pred.lower_bound)} - ${formatPrice(pred.upper_bound)}<br>` +
-                    `Confidence: ${(pred.confidence_level * 100).toFixed(0)}%`;
-
-                updatePredictionChart(data);
-            }
-
-            // Update ROI analysis
-            if (data.expected_roi) {
-                const roi = data.expected_roi;
-                resultDiv.querySelector('.roi-details').innerHTML = 
-                    `Expected ROI: ${roi.value.toFixed(2)}%<br>` +
-                    `Range: ${roi.range.low.toFixed(2)}% to ${roi.range.high.toFixed(2)}%`;
-            }
-        }
-
-        function updatePredictionChart(data) {
-            if (!data.price_prediction) return;
-
-            const pred = data.price_prediction;
-            const currentPrice = data.current_price;
-            const holdingYears = parseFloat(document.getElementById('holdingYears').value);
-
-            // Create time points
-            const timePoints = [];
-            const now = new Date();
-            for (let i = 0; i <= holdingYears * 12; i++) {
-                const date = new Date(now);
-                date.setMonth(date.getMonth() + i);
-                timePoints.push(date);
-            }
-
-            // Create prediction line
-            const predictionLine = timePoints.map((_, i) => {
-                const progress = i / (timePoints.length - 1);
-                return currentPrice + (pred.predicted_price - currentPrice) * progress;
-            });
-
-            // Create confidence interval
-            const upperBound = timePoints.map((_, i) => {
-                const progress = i / (timePoints.length - 1);
-                return currentPrice + (pred.upper_bound - currentPrice) * progress;
-            });
-
-            const lowerBound = timePoints.map((_, i) => {
-                const progress = i / (timePoints.length - 1);
-                return currentPrice + (pred.lower_bound - currentPrice) * progress;
-            });
-
-            if (predictionChart) {
-                predictionChart.destroy();
-            }
-
-            const ctx = document.getElementById('predictionChart').getContext('2d');
-            predictionChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: timePoints,
-                    datasets: [{
-                        label: 'Predicted Price',
-                        data: predictionLine,
-                        borderColor: 'rgb(75, 192, 192)',
-                        tension: 0.1
-                    }, {
-                        label: 'Upper Bound',
-                        data: upperBound,
-                        borderColor: 'rgba(75, 192, 192, 0.3)',
-                        fill: false,
-                        tension: 0.1
-                    }, {
-                        label: 'Lower Bound',
-                        data: lowerBound,
-                        borderColor: 'rgba(75, 192, 192, 0.3)',
-                        fill: '-1',
-                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
-                        tension: 0.1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            type: 'time',
-                            time: {
-                                unit: 'month'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Price ($)'
-                            }
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Price Prediction'
-                        }
-                    }
-                }
-            });
         }
     </script>
 </body>
