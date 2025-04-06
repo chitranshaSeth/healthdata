@@ -28,3 +28,7 @@ build/
 # Local development settings
 instance/
 .webassets-cache
+
+# macOS system files
+.DS_Store
+**/.DS_Store
