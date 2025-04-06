@@ -1,5 +1,30 @@
+# Python virtual environment
 venv/
+env/
+ENV/
+
+# Python cache files
 __pycache__/
-*.pyc
-.DS_Store
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Environment variables
 .env
+
+# Logs
+*.log
+
+# Local development settings
+instance/
+.webassets-cache
